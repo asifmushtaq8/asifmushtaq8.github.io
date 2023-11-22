@@ -20,7 +20,7 @@ $(document).ready(function () {
   });
 
   var typed = new Typed(".about-typing", {
-    strings: ["Mobile Developer", "Web Developer", "Automation Maker"],
+    strings: ["Unity Game Developer", "AR/VR Developer"],
     typeSpeed: 100,
     backSpeed: 60,
     loop:true
