@@ -2,7 +2,7 @@
 <h5 align="center" font-weigth="bold">  This is my portfolio, in it you will find a little about me, a summary of my main projects and contact channels</h5>
 <p align="justify"> 
 
-Made with popular technologies on the market and fully responsive, I based myself on the HTML, CSS, JS youtube tutorial "Coding Nepal" </p>
+Made with popular technologies on the market and fully responsive, I based myself on the HTML, CSS, JS  </p>
 <img src="https://img.shields.io/static/v1?label=HTML&message=CSS&color=blue&style=for-the-badge&logo=HTML"/>
 <p align="center" >
 
