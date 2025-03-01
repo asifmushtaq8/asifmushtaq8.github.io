@@ -13,7 +13,7 @@ $(document).ready(function () {
   });
   /* Typing animation */
   var typed = new Typed(".home-typing", {
-    strings: ["Unity Game Developer", "AR/VR Developer", "Freelancer", "Tech enthusiast"],
+    strings: ["Unity Game Developer", "AR/VR Developer", "ROBLOX Game Developer", "Freelancer", "Tech enthusiast"],
     typeSpeed: 100,
     backSpeed: 60,
     loop:true
