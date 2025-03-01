@@ -20,7 +20,7 @@ $(document).ready(function () {
   });
 
   var typed = new Typed(".about-typing", {
-    strings: ["Unity Game Developer", "AR/VR Developer"],
+    strings: ["Unity Game Developer", "AR/VR Developer", "ROBLOX Game Developer"],
     typeSpeed: 100,
     backSpeed: 60,
     loop:true
