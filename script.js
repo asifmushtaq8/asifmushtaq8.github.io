@@ -120,7 +120,6 @@ const navLinks = document.getElementById("navLinks");
 const projectsGrid = document.getElementById("projectsGrid");
 const year = document.getElementById("year");
 const typingText = document.getElementById("typingText");
-const cursorGlow = document.querySelector(".cursor-glow");
 
 year.textContent = new Date().getFullYear();
 
@@ -314,13 +313,7 @@ contactForm.addEventListener("submit", (event) => {
   window.open(`https://api.whatsapp.com/send?phone=923051234913&text=${whatsappMessage}`, "_blank", "noopener,noreferrer");
 });
 
-/* Cursor glow */
-window.addEventListener("mousemove", (event) => {
-  if (!cursorGlow) return;
 
-  cursorGlow.style.left = `${event.clientX}px`;
-  cursorGlow.style.top = `${event.clientY}px`;
-});
 
 /* Lightweight particles */
 const canvas = document.getElementById("particlesCanvas");
