@@ -16,6 +16,14 @@ const projects = [
     tags: ["Unity", "Racing", "Android"]
   },
   {
+    title: "Save The Pet",
+    description: "🐾 Save The all pets — Draw, Protect & Rescue in the Ultimate Pet Rescue Game!",
+    image: "./assets/SaveThePet.png",
+    link: "https://play.google.com/store/apps/details?id=com.rhg.save.my.pets.brain.puzzle.animal.rescue.game",
+    category: "android",
+    tags: ["Unity", "Casual", "Android"]
+  },
+  {
     title: "Car Trade Dealer Game",
     description: "Used car dealer simulator with virtual business tycoon gameplay.",
     image: "./assets/car dealer icon.png",
