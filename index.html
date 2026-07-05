@@ -4,29 +4,59 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Asif Mushtaq | Unity & Roblox Game Developer</title>
+  <title>Asif Mushtaq | Indie Unity Game Developer</title>
 
-  <meta name="description" content="Portfolio of Asif Mushtaq, Unity and Roblox Game Developer specializing in mobile games, AR/VR apps, C#, Lua, AdMob monetization, and gameplay systems." />
-  <meta name="keywords" content="Asif Mushtaq, Unity Game Developer, Roblox Developer, C# Developer, Lua Developer, AR VR Developer, Mobile Game Developer, Lahore Game Developer" />
+  <meta name="description" content="Portfolio of Asif Mushtaq, an indie Unity game developer building mobile games, AR/VR apps, and Roblox experiences with C#, Lua, and AdMob monetization." />
+  <meta name="keywords" content="Asif Mushtaq, Indie Unity Game Developer, Unity Game Developer, Roblox Developer, C# Developer, Lua Developer, AR VR Developer, Mobile Game Developer, Lahore Game Developer" />
   <meta name="author" content="Asif Mushtaq" />
+  <meta name="theme-color" content="#050816" />
 
-  <meta property="og:title" content="Asif Mushtaq | Unity & Roblox Game Developer" />
-  <meta property="og:description" content="Unity and Roblox Game Developer portfolio featuring mobile games, AR/VR apps, and monetization-ready gameplay systems." />
+  <meta property="og:title" content="Asif Mushtaq | Indie Unity Game Developer" />
+  <meta property="og:description" content="Indie Unity game developer portfolio featuring mobile games, AR/VR apps, and monetization-ready gameplay systems." />
   <meta property="og:image" content="./assets/profile.jpg" />
   <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AE%3C/text%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="style.css" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
   />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Asif Mushtaq",
+    "jobTitle": "Indie Unity Game Developer",
+    "email": "mailto:asifmushtaq435@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Lahore",
+      "addressCountry": "PK"
+    },
+    "sameAs": [
+      "https://github.com/asifmushtaq8",
+      "https://www.linkedin.com/in/asifgamedev",
+      "https://www.instagram.com/phantomboyasif"
+    ]
+  }
+  </script>
 </head>
 
 <body>
   
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
     <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <button class="lite-toggle" id="liteModeToggle" aria-pressed="false" aria-label="Toggle lightweight mode" title="Switch to lite mode">
+    <i class="fa-solid fa-bolt"></i>
   </button>
 
   <header class="site-header" id="siteHeader">
@@ -66,14 +96,19 @@
         <span class="orb orb-one"></span>
         <span class="orb orb-two"></span>
         <span class="orb orb-three"></span>
-        <div class="grid-3d"></div>
+        <div class="grid-3d"><div class="grid-3d-inner"></div></div>
       </div>
 
       <canvas id="particlesCanvas" class="particles-canvas"></canvas>
 
       <div class="container hero-content">
         <div class="hero-text reveal">
-          <p class="eyebrow">Unity • Roblox • AR/VR • Mobile Games</p>
+          <span class="availability-badge">
+            <span class="availability-dot"></span>
+            Available for freelance & contract work
+          </span>
+
+          <p class="eyebrow">Indie Unity Developer • Roblox • AR/VR • Mobile Games</p>
 
           <h1>
             Hi, I’m <span>Asif Mushtaq</span>
@@ -123,7 +158,14 @@
         <div class="hero-visual reveal">
           <div class="profile-card tilt-card">
             <div class="profile-ring"></div>
-            <img src="./assets/profile.jpg" alt="Asif Mushtaq Unity and Roblox Game Developer" />
+            <img
+              src="./assets/profile.jpg"
+              alt="Asif Mushtaq, Indie Unity Game Developer"
+              width="430"
+              height="430"
+              fetchpriority="high"
+              decoding="async"
+            />
             <div class="floating-badge badge-one">
               <i class="fa-brands fa-unity"></i>
               Unity
@@ -324,18 +366,28 @@
           </div>
 
           <form class="contact-form glass-card reveal" id="contactForm">
+            <!-- Get a free access key at https://web3forms.com and paste it below -->
+            <input type="hidden" name="access_key" value="56c27cab-a4a7-4289-bd77-02045c479984" />
+            <input type="hidden" name="subject" value="New message from your portfolio site" />
+            <input type="hidden" name="from_name" value="Asif Mushtaq Portfolio" />
+
+            <!-- honeypot: real visitors never see or fill this, bots usually do -->
+            <input type="checkbox" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off" />
+
             <div class="form-row">
-              <input type="text" id="name" placeholder="Your Name" required />
-              <input type="email" id="email" placeholder="Your Email" required />
+              <input type="text" id="name" name="name" placeholder="Your Name" required />
+              <input type="email" id="email" name="email" placeholder="Your Email" required />
             </div>
 
-            <input type="text" id="subject" placeholder="Subject" required />
-            <textarea id="message" rows="7" placeholder="Your Message" required></textarea>
+            <input type="text" id="subject" name="user_subject" placeholder="Subject" required />
+            <textarea id="message" name="message" rows="7" placeholder="Your Message" required></textarea>
 
-            <button class="btn primary-btn" type="submit">
-              <i class="fa-brands fa-whatsapp"></i>
-              Send Message
+            <button class="btn primary-btn" type="submit" id="contactSubmitBtn">
+              <i class="fa-solid fa-paper-plane" id="contactSubmitIcon"></i>
+              <span id="contactSubmitLabel">Send Message</span>
             </button>
+
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
           </form>
         </div>
       </div>

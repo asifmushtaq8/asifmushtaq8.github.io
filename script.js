@@ -131,16 +131,51 @@ const typingText = document.getElementById("typingText");
 
 year.textContent = new Date().getFullYear();
 
-/* Header and scroll button */
-window.addEventListener("scroll", () => {
-  const isScrolled = window.scrollY > 80;
+/* ------------------------------------------------------------------
+   PERFORMANCE MODE
+   Detects low-end hardware / data-saver mode / reduced-motion so the
+   hero's canvas particles, floating orbs, and 3D tilt don't tank the
+   frame rate on cheap or older phones. Adds `.reduce-fx` to <body>,
+   which style.css uses to hide the heaviest decorative animations.
+------------------------------------------------------------------- */
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const isLowEndDevice =
+  (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+  (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+  (navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || "")));
 
-  header.classList.toggle("scrolled", isScrolled);
-  scrollTopBtn.classList.toggle("show", window.scrollY > 500);
-});
+const reduceFX = prefersReducedMotion || isLowEndDevice;
+
+if (reduceFX) {
+  document.body.classList.add("reduce-fx");
+}
+
+/* Header and scroll button (throttled to one update per animation frame) */
+let scrollTicking = false;
+
+function updateOnScroll() {
+  const scrollY = window.scrollY;
+
+  header.classList.toggle("scrolled", scrollY > 80);
+  scrollTopBtn.classList.toggle("show", scrollY > 500);
+
+  scrollTicking = false;
+}
+
+window.addEventListener(
+  "scroll",
+  () => {
+    if (!scrollTicking) {
+      requestAnimationFrame(updateOnScroll);
+      scrollTicking = true;
+    }
+  },
+  { passive: true }
+);
 
 scrollTopBtn.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
 });
 
 /* Mobile menu */
@@ -204,7 +239,12 @@ function typeEffect() {
   setTimeout(typeEffect, speed);
 }
 
-typeEffect();
+if (prefersReducedMotion) {
+  // Skip the letter-by-letter interval entirely, just show one word
+  typingText.textContent = typingWords[0];
+} else {
+  typeEffect();
+}
 
 /* Project cards */
 function renderProjects(filter = "all") {
@@ -219,7 +259,7 @@ function renderProjects(filter = "all") {
       <article class="project-card tilt-card reveal" data-category="${project.category}">
         <div class="project-inner">
           <div class="project-image">
-            <img src="${project.image}" alt="${project.title} game icon" loading="lazy">
+            <img src="${project.image}" alt="${project.title} game icon" width="132" height="132" loading="lazy" decoding="async">
           </div>
 
           <h3>${project.title}</h3>
@@ -257,15 +297,25 @@ document.querySelectorAll(".filter-btn").forEach((button) => {
   });
 });
 
-/* 3D tilt effect */
+/* 3D tilt effect — skipped on touch devices (no hover anyway) and in
+   performance mode, and batched to one style write per frame elsewhere. */
 function addTiltEffect() {
+  if (!hasFinePointer || reduceFX) return;
+
   const tiltCards = document.querySelectorAll(".tilt-card");
 
   tiltCards.forEach((card) => {
-    card.addEventListener("mousemove", (event) => {
+    // Avoid attaching duplicate listeners when renderProjects() re-runs
+    if (card.dataset.tiltBound) return;
+    card.dataset.tiltBound = "true";
+
+    let pendingEvent = null;
+    let rafId = null;
+
+    function applyTilt() {
       const rect = card.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      const x = pendingEvent.clientX - rect.left;
+      const y = pendingEvent.clientY - rect.top;
 
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
@@ -274,9 +324,25 @@ function addTiltEffect() {
       const rotateY = ((x - centerX) / centerX) * 8;
 
       card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
-    });
+      rafId = null;
+    }
+
+    card.addEventListener(
+      "mousemove",
+      (event) => {
+        pendingEvent = event;
+        if (rafId === null) {
+          rafId = requestAnimationFrame(applyTilt);
+        }
+      },
+      { passive: true }
+    );
 
     card.addEventListener("mouseleave", () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)";
     });
   });
@@ -305,87 +371,301 @@ function observeRevealElements() {
 
 observeRevealElements();
 
-/* Contact form to WhatsApp */
+/* Contact form → emails asifmushtaq435@gmail.com directly via Web3Forms
+   (free, no backend needed). Get your own access key at web3forms.com
+   and paste it into the hidden "access_key" input in index.html. */
 const contactForm = document.getElementById("contactForm");
+const submitBtn = document.getElementById("contactSubmitBtn");
+const submitIcon = document.getElementById("contactSubmitIcon");
+const submitLabel = document.getElementById("contactSubmitLabel");
+const formStatus = document.getElementById("formStatus");
 
-contactForm.addEventListener("submit", (event) => {
+contactForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const subject = document.getElementById("subject").value.trim();
-  const message = document.getElementById("message").value.trim();
+  const accessKey = contactForm.querySelector('[name="access_key"]').value;
 
-  const whatsappMessage = `Hi Asif,%0A%0AName: ${encodeURIComponent(name)}%0AEmail: ${encodeURIComponent(email)}%0ASubject: ${encodeURIComponent(subject)}%0A%0AMessage:%0A${encodeURIComponent(message)}`;
+  if (!accessKey || accessKey === "YOUR_WEB3FORMS_ACCESS_KEY") {
+    formStatus.dataset.state = "error";
+    formStatus.textContent =
+      "Form isn't connected yet — add a free Web3Forms access key in index.html.";
+    return;
+  }
 
-  window.open(`https://api.whatsapp.com/send?phone=923051234913&text=${whatsappMessage}`, "_blank", "noopener,noreferrer");
+  // Honeypot: if this hidden checkbox got checked, silently drop the submission
+  if (contactForm.querySelector('[name="botcheck"]').checked) {
+    return;
+  }
+
+  // Fold the visitor's own subject line into the email subject Web3Forms sends
+  const userSubject = document.getElementById("subject").value.trim();
+  if (userSubject) {
+    contactForm.querySelector('[name="subject"]').value = `Portfolio contact: ${userSubject}`;
+  }
+
+  submitBtn.disabled = true;
+  submitIcon.className = "fa-solid fa-spinner fa-spin";
+  submitLabel.textContent = "Sending...";
+  formStatus.textContent = "";
+  formStatus.removeAttribute("data-state");
+
+  try {
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: new FormData(contactForm)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      formStatus.dataset.state = "success";
+      formStatus.textContent = "Message sent! I'll get back to you soon.";
+      contactForm.reset();
+    } else {
+      throw new Error(result.message || "Something went wrong.");
+    }
+  } catch (error) {
+    formStatus.dataset.state = "error";
+    formStatus.textContent = "Couldn't send that — please try again or email me directly.";
+  } finally {
+    submitBtn.disabled = false;
+    submitIcon.className = "fa-solid fa-paper-plane";
+    submitLabel.textContent = "Send Message";
+  }
 });
 
 
 
-/* Lightweight particles */
+/* Lightweight particles — only runs in the hero and only while it's on
+   screen. Frame rate is capped (not left to run flat-out at 60fps+), and a
+   watchdog below measures the REAL frame rate the browser is achieving and
+   drops into lite mode if it's struggling, regardless of what the device
+   heuristics guessed (some machines — e.g. a loaded-down MacBook, or Safari
+   with several tabs open — are "capable" on paper but still can't keep up
+   with backdrop blur + canvas + a dozen animated elements at once). */
 const canvas = document.getElementById("particlesCanvas");
-const ctx = canvas.getContext("2d");
+const heroSection = document.getElementById("home");
+const liteModeToggle = document.getElementById("liteModeToggle");
 
-let particles = [];
+function setLiteMode(isLite) {
+  document.body.classList.toggle("reduce-fx", isLite);
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  if (liteModeToggle) {
+    liteModeToggle.setAttribute("aria-pressed", String(isLite));
+    liteModeToggle.title = isLite ? "Switch back to full animations" : "Switch to lite mode";
+  }
+
+  if (isLite) {
+    stopParticles();
+  } else if (heroInView && !document.hidden) {
+    startParticles();
+  }
 }
 
-function createParticles() {
-  const count = Math.min(90, Math.floor(window.innerWidth / 18));
+let heroInView = true;
+let animationId = null;
+let startParticles = () => {};
+let stopParticles = () => {};
 
-  particles = Array.from({ length: count }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    radius: Math.random() * 2 + 0.7,
-    vx: (Math.random() - 0.5) * 0.45,
-    vy: (Math.random() - 0.5) * 0.45
-  }));
-}
+if (canvas) {
+  const ctx = canvas.getContext("2d");
+  let particles = [];
+  let drawLines = hasFinePointer; // skip the O(n²) link lines on touch/low-power setups
+  const connectDistance = 90;
+  const targetFrameInterval = 1000 / 45; // capping at ~45fps (vs 60+) cuts baseline work by roughly a quarter
+  let lastRenderTime = 0;
 
-function drawParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
 
-  particles.forEach((particle, index) => {
-    particle.x += particle.vx;
-    particle.y += particle.vy;
+  function createParticles() {
+    // Trimmed well below the original 90 — this, plus the O(n²) connecting
+    // lines running every frame forever, was the single biggest source of
+    // hero jank.
+    const base = hasFinePointer ? 36 : 22;
+    const count = Math.min(base, Math.floor(window.innerWidth / 30));
 
-    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2 + 0.7,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45
+    }));
+  }
 
-    ctx.beginPath();
-    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(34, 211, 238, 0.75)";
-    ctx.fill();
+  function renderFrame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let j = index + 1; j < particles.length; j++) {
-      const other = particles[j];
-      const dx = particle.x - other.x;
-      const dy = particle.y - other.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+    particles.forEach((particle, index) => {
+      particle.x += particle.vx;
+      particle.y += particle.vy;
 
-      if (distance < 130) {
-        ctx.beginPath();
-        ctx.moveTo(particle.x, particle.y);
-        ctx.lineTo(other.x, other.y);
-        ctx.strokeStyle = `rgba(30, 144, 255, ${1 - distance / 130})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
+      if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+      if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(34, 211, 238, 0.75)";
+      ctx.fill();
+
+      if (!drawLines) return;
+
+      for (let j = index + 1; j < particles.length; j++) {
+        const other = particles[j];
+        const dx = particle.x - other.x;
+        const dy = particle.y - other.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < connectDistance) {
+          ctx.beginPath();
+          ctx.moveTo(particle.x, particle.y);
+          ctx.lineTo(other.x, other.y);
+          ctx.strokeStyle = `rgba(30, 144, 255, ${1 - distance / connectDistance})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
       }
+    });
+  }
+
+  function tick(timestamp) {
+    // Frame-rate cap: if we're being called faster than the target interval,
+    // just reschedule without doing any drawing work
+    if (timestamp - lastRenderTime >= targetFrameInterval) {
+      lastRenderTime = timestamp;
+      renderFrame();
+    }
+
+    animationId = requestAnimationFrame(tick);
+  }
+
+  startParticles = function () {
+    if (document.body.classList.contains("reduce-fx")) return;
+    if (animationId === null) {
+      animationId = requestAnimationFrame(tick);
+    }
+  };
+
+  stopParticles = function () {
+    if (animationId !== null) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+  };
+
+  resizeCanvas();
+  createParticles();
+
+  if (!reduceFX) {
+    startParticles();
+  }
+
+  // Pause the canvas the moment the hero scrolls out of view — there's no
+  // point spending CPU animating something nobody can see.
+  const heroObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        heroInView = entry.isIntersecting;
+        if (heroInView && !document.hidden) {
+          startParticles();
+        } else {
+          stopParticles();
+        }
+      });
+    },
+    { threshold: 0 }
+  );
+
+  if (heroSection) heroObserver.observe(heroSection);
+
+  // Pause on background tabs too
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopParticles();
+    } else if (heroInView) {
+      startParticles();
     }
   });
 
-  requestAnimationFrame(drawParticles);
+  // Debounce resize so dragging a window edge doesn't rebuild the particle
+  // array dozens of times a second
+  let resizeTimer = null;
+  window.addEventListener(
+    "resize",
+    () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resizeCanvas();
+        createParticles();
+      }, 150);
+    },
+    { passive: true }
+  );
+
+  // If the connecting lines alone are enough to push a frame over budget,
+  // drop just that part before giving up on particles entirely
+  window.__dropConnectingLines = () => {
+    drawLines = false;
+  };
 }
 
-resizeCanvas();
-createParticles();
-drawParticles();
+/* Manual override: lets anyone force lite mode on/off regardless of what
+   the automatic checks decided (useful if detection guesses wrong for a
+   particular browser/machine combination). */
+if (liteModeToggle) {
+  liteModeToggle.addEventListener("click", () => {
+    setLiteMode(!document.body.classList.contains("reduce-fx"));
+  });
+}
 
-window.addEventListener("resize", () => {
-  resizeCanvas();
-  createParticles();
-});
+/* ------------------------------------------------------------------
+   PERFORMANCE WATCHDOG
+   Device-attribute checks (deviceMemory, hardwareConcurrency, etc.) don't
+   catch every slow case — a multi-core MacBook can still drop frames from
+   backdrop-filter cost, thermal throttling, an external display, or just
+   having a dozen other tabs open. This measures the frame rate the page
+   is ACTUALLY getting right after load and drops into lite mode if it's
+   too low, which catches those cases too.
+------------------------------------------------------------------- */
+if (!reduceFX) {
+  (function watchFrameRate() {
+    let frames = 0;
+    let windowStart = performance.now();
+    let windowsChecked = 0;
+    const maxWindows = 3; // sample up to ~6s total, then stop watching
+
+    function sample(now) {
+      frames++;
+      const elapsed = now - windowStart;
+
+      if (elapsed >= 2000) {
+        const fps = (frames * 1000) / elapsed;
+        windowsChecked++;
+
+        if (fps < 40) {
+          // First response is cheap: drop the O(n²) connecting lines alone
+          if (window.__dropConnectingLines) window.__dropConnectingLines();
+
+          // If it's still struggling on a later pass, go all the way to lite mode
+          if (windowsChecked > 1) {
+            setLiteMode(true);
+            return;
+          }
+        } else if (windowsChecked >= maxWindows) {
+          return; // page has proven itself fast enough, stop watching
+        }
+
+        frames = 0;
+        windowStart = now;
+      }
+
+      requestAnimationFrame(sample);
+    }
+
+    requestAnimationFrame(sample);
+  })();
+}
