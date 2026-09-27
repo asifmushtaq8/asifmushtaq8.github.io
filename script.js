@@ -16,12 +16,44 @@ const projects = [
     tags: ["Unity", "Racing", "Android"]
   },
   {
-    title: "Save The Pet",
-    description: "🐾 Save The all pets — Draw, Protect & Rescue in the Ultimate Pet Rescue Game!",
-    image: "./assets/SaveThePet.png",
-    link: "https://play.google.com/store/apps/details?id=com.rhg.save.my.pets.brain.puzzle.animal.rescue.game",
+    title: "Jewel Coloring",
+    description: "Pixel relaxing diamond game.",
+    image: "./assets/jewel gemshade.jpeg",
+    link: "https://apps.apple.com/tt/app/jewel-gemshade-coloring-world/id6783240367",
+    category: "ios",
+    tags: ["Unity", "Casual", "iOS"]
+  },
+  {
+    title: "Supermarket Factory Simulator",
+    description: "Inheriting a small, run-down grocery store in a bustling town.",
+    image: "./assets/supermarket sim.jpeg",
+    link: "https://play.google.com/store/apps/details?id=com.rg.hyper.supermarket.simulatorgames.manager.retailstore",
     category: "android",
-    tags: ["Unity", "Casual", "Android"]
+    tags: ["Unity", "Simulation", "Android"]
+  },
+  {
+    title: "Save The Pet",
+    description: "Draw, Protect & Rescue in the Ultimate Pet Rescue Game!",
+    image: "./assets/save the pet.jpeg",
+    link: "https://apps.apple.com/tt/app/save-petresq-draw-brain-puzzle/id6786613251",
+    category: "ios",
+    tags: ["Unity", "Casual", "iOS"]
+  },
+  {
+    title: "Epic Sky Plane",
+    description: "Plane Racing Game",
+    image: "./assets/epic sky plane.png",
+    link: "https://play.google.com/store/apps/details?id=com.tbs.build.epic.skies.plane.aircraft.game",
+    category: "android",
+    tags: ["Unity", "Racing", "Android"]
+  },
+  {
+    title: "Dog Pawscape Cute Pet Rescue",
+    description: "Cute playfull animal journey.",
+    image: "./assets/Dog Escape.jpeg",
+    link: "https://apps.apple.com/tt/app/dog-pawscape-cute-pet-rescue/id6791078751",
+    category: "ios",
+    tags: ["Unity", "Casual", "iOS"]
   },
   {
     title: "Car Trade Dealer Game",
