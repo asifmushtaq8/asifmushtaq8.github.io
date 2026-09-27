@@ -112,14 +112,6 @@ const projects = [
     tags: ["Unity", "iOS", "Runner"]
   },
   {
-    title: "Car Trade Dealer Game",
-    description: "Used car dealer simulator with virtual business tycoon gameplay.",
-    image: "./assets/car dealer icon.png",
-    link: "https://play.google.com/store/apps/details?id=com.fs.cardealer.jobsimulator.cargame",
-    category: "android",
-    tags: ["Unity", "Simulator", "Business"]
-  },
-  {
     title: "Futchbol",
     description: "Player-name puzzle game developed using Unity and Realtime Database.",
     image: "./assets/futchbol.png",
