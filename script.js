@@ -55,13 +55,45 @@ const projects = [
     category: "ios",
     tags: ["Unity", "Casual", "iOS"]
   },
-  {
-    title: "Car Trade Dealer Game",
-    description: "Used car dealer simulator with virtual business tycoon gameplay.",
-    image: "./assets/car dealer icon.png",
-    link: "https://play.google.com/store/apps/details?id=com.fs.cardealer.jobsimulator.cargame",
+   {
+    title: "Snowball Race",
+    description: "Build the ball to cross bridge",
+    image: "./assets/snowball race.jpeg",
+    link: "https://play.google.com/store/apps/details?id=com.snow.ball.race.bridge.race",
     category: "android",
-    tags: ["Unity", "Simulator", "Business"]
+    tags: ["Unity", "Casual", "Android"]
+  },
+    {
+    title: "Cat Simulator",
+    description: "Get ready for a cat and granny battle.",
+    image: "./assets/Cat Sim.jpeg",
+    link: "https://play.google.com/store/apps/details?id=com.fangent.cat.game.simulator.animal.simulation",
+    category: "android",
+    tags: ["Unity", "Simulation", "Android"]
+  },
+    {
+    title: "Hide and Seek",
+    description: "Play this strategy game either as a hider or a seeker.",
+    image: "./assets/hide n seek.jpeg",
+    link: "https://play.google.com/store/apps/details?id=com.fangent.hide.seek.adventure",
+    category: "android",
+    tags: ["Unity", "Casual", "Android"]
+  },
+   {
+    title: "FPS Gun Shooter",
+    description: "FPS Shooting game.",
+    image: "./assets/fps gun.jpeg",
+    link: "https://play.google.com/store/apps/details?id=com.fangent.free.gun.shooter.strike.bullet.force.shooting.games",
+    category: "android",
+    tags: ["Unity", "Simulation", "Android"]
+  },
+   {
+    title: "Boss Lady Run",
+    description: "Girl runner and dress-up game with casual gameplay mechanics.",
+    image: "./assets/boss lady icon.PNG",
+    link: "https://play.google.com/store/apps/details?id=com.ForbiddenGames.BossLady&hl=en",
+    category: "android",
+    tags: ["Unity", "Runner", "Casual"]
   },
   {
     title: "Zombie Shooting 3D",
@@ -80,36 +112,20 @@ const projects = [
     tags: ["Unity", "iOS", "Runner"]
   },
   {
+    title: "Car Trade Dealer Game",
+    description: "Used car dealer simulator with virtual business tycoon gameplay.",
+    image: "./assets/car dealer icon.png",
+    link: "https://play.google.com/store/apps/details?id=com.fs.cardealer.jobsimulator.cargame",
+    category: "android",
+    tags: ["Unity", "Simulator", "Business"]
+  },
+  {
     title: "Futchbol",
     description: "Player-name puzzle game developed using Unity and Realtime Database.",
     image: "./assets/futchbol.png",
     link: "https://www.youtube.com/watch?v=_5fhpM1oqV4&ab_channel=AsifMushtaq",
     category: "youtube",
     tags: ["Unity", "RTDB", "Puzzle"]
-  },
-  {
-    title: "Boss Lady Run",
-    description: "Girl runner and dress-up game with casual gameplay mechanics.",
-    image: "./assets/boss lady icon.PNG",
-    link: "https://play.google.com/store/apps/details?id=com.ForbiddenGames.BossLady&hl=en",
-    category: "android",
-    tags: ["Unity", "Runner", "Casual"]
-  },
-  {
-    title: "Truck Simulator",
-    description: "Immersive truck driving and trucking adventure game.",
-    image: "./assets/truck sim icon.png",
-    link: "https://play.google.com/store/apps/details?id=com.cg.trucksimulatorgames.ultimate.truckdriving",
-    category: "android",
-    tags: ["Unity", "Simulator", "Driving"]
-  },
-  {
-    title: "Supermarket Simulator",
-    description: "A supermarket manager simulation game with addictive store gameplay.",
-    image: "./assets/supermarket simulator icon.png",
-    link: "https://apkpure.com/supermarket-simulator-3d-games/com.fs.supermarket.store.simulator.cashier.game",
-    category: "android",
-    tags: ["Unity", "Simulator", "APK"]
   },
   {
     title: "Space Defender",
@@ -120,36 +136,20 @@ const projects = [
     tags: ["Unity", "Shooter", "Hybrid Casual"]
   },
   {
-    title: "Prank PhoneCall",
-    description: "Prank video call app created from scratch in Unity.",
-    image: "./assets/project2.png",
-    link: "https://play.google.com/store/apps/details?id=com.fakecall.fakechat.prank.app&hl=en&gl=US",
-    category: "android",
-    tags: ["Unity", "App", "Android"]
-  },
-  {
-    title: "Race Max",
-    description: "Car racing simulator game with different levels and modes.",
-    image: "./assets/racemaxx.png",
-    link: "https://www.youtube.com/watch?v=NV-6sMkHTtU&ab_channel=AsifMushtaq",
-    category: "youtube",
-    tags: ["Unity", "Racing", "Demo"]
-  },
-  {
-    title: "Bubble Pop King Clone",
-    description: "Bubble Pop King style clone with 500 levels created for a client.",
+    title: "Bubble Pop King",
+    description: "Bubble Pop King style game with 500 levels created for a client.",
     image: "./assets/bubblepopicon23.jpg",
     link: "https://play.google.com/store/apps/details?id=com.bubble.shooter.bubble.pop.king.game&hl=en&gl=US",
     category: "android",
     tags: ["Unity", "500 Levels", "Client Work"]
   },
   {
-    title: "AR Decor",
+    title: "AR Decor (FYP)",
     description: "Augmented Reality furniture app for viewing furniture in real-world environments.",
     image: "./assets/project1.png",
     link: "https://www.youtube.com/shorts/bvKDqneYBr0",
     category: "ar",
-    tags: ["Unity", "AR", "Furniture"]
+    tags: ["Unity", "AR", "Final Year Project"]
   }
 ];
 
